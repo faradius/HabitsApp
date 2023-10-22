@@ -40,7 +40,5 @@ q
 Aapp/src/main/java/com/alex/habitsapp/navigation/NavigationHost.kt,8\3\832d6184e92e4be9173c915765e5d283ca3f3340
 d
 4app/src/main/java/com/alex/habitsapp/MainActivity.kt,1\9\19afd475978c915866cdeccdcd4f7c97b728a493
-€
-Papp/src/main/java/com/alex/habitsapp/onboarding/presentation/OnboardingScreen.kt,a\6\a655cc46f4f9f2c608b7c86698768e8297788ac9
 Š
 Zapp/src/main/java/com/alex/habitsapp/onboarding/presentation/components/OnboardingPager.kt,2\c\2cd1f62555b56f83d03fd48698011d6f25fe0b0b
