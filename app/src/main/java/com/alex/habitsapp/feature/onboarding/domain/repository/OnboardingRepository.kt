@@ -1,4 +1,4 @@
-package com.alex.habitsapp.onboarding.domain.repository
+package com.alex.habitsapp.feature.onboarding.domain.repository
 
 interface OnboardingRepository {
     fun hasSeenOnboarding(): Boolean

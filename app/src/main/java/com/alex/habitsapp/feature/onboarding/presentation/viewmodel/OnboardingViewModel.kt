@@ -1,11 +1,11 @@
-package com.alex.habitsapp.onboarding.presentation.viewmodel
+package com.alex.habitsapp.feature.onboarding.presentation.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.alex.habitsapp.onboarding.domain.usecase.CompleteOnboardingUseCase
-import com.alex.habitsapp.onboarding.domain.usecase.HasSeenOnboardingUseCase
+import com.alex.habitsapp.feature.onboarding.domain.usecase.CompleteOnboardingUseCase
+import com.alex.habitsapp.feature.onboarding.domain.usecase.HasSeenOnboardingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

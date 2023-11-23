@@ -1,4 +1,4 @@
-package com.alex.habitsapp.onboarding.presentation.model
+package com.alex.habitsapp.feature.onboarding.presentation.model
 
 import androidx.annotation.DrawableRes
 

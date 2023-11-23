@@ -1,7 +1,7 @@
-package com.alex.habitsapp.onboarding.data.repository
+package com.alex.habitsapp.feature.onboarding.data.repository
 
 import android.content.SharedPreferences
-import com.alex.habitsapp.onboarding.domain.repository.OnboardingRepository
+import com.alex.habitsapp.feature.onboarding.domain.repository.OnboardingRepository
 
 class OnboardingRepositoryImpl(
     private val sharedPreferences: SharedPreferences

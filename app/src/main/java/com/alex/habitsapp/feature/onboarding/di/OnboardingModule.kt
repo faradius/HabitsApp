@@ -1,11 +1,11 @@
-package com.alex.habitsapp.onboarding.di
+package com.alex.habitsapp.feature.onboarding.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.alex.habitsapp.onboarding.data.repository.OnboardingRepositoryImpl
-import com.alex.habitsapp.onboarding.domain.repository.OnboardingRepository
-import com.alex.habitsapp.onboarding.domain.usecase.CompleteOnboardingUseCase
-import com.alex.habitsapp.onboarding.domain.usecase.HasSeenOnboardingUseCase
+import com.alex.habitsapp.feature.onboarding.data.repository.OnboardingRepositoryImpl
+import com.alex.habitsapp.feature.onboarding.domain.repository.OnboardingRepository
+import com.alex.habitsapp.feature.onboarding.domain.usecase.CompleteOnboardingUseCase
+import com.alex.habitsapp.feature.onboarding.domain.usecase.HasSeenOnboardingUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,19 +24,19 @@ object OnboardingModule {
 
     @Provides
     @Singleton
-    fun provideOnboardingRepository(sharedPreferences: SharedPreferences): OnboardingRepository{
+    fun provideOnboardingRepository(sharedPreferences: SharedPreferences): OnboardingRepository {
         return OnboardingRepositoryImpl(sharedPreferences)
     }
 
     @Provides
     @Singleton
-    fun provideHasSeenOnboardingUseCase(repository: OnboardingRepository): HasSeenOnboardingUseCase{
+    fun provideHasSeenOnboardingUseCase(repository: OnboardingRepository): HasSeenOnboardingUseCase {
         return HasSeenOnboardingUseCase(repository)
     }
 
     @Provides
     @Singleton
-    fun provideCompleteOnboardingUseCase(repository: OnboardingRepository): CompleteOnboardingUseCase{
+    fun provideCompleteOnboardingUseCase(repository: OnboardingRepository): CompleteOnboardingUseCase {
         return CompleteOnboardingUseCase(repository)
     }
 }

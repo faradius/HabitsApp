@@ -1,4 +1,4 @@
-package com.alex.habitsapp.onboarding.presentation.components
+package com.alex.habitsapp.feature.onboarding.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,7 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.alex.habitsapp.core.presentation.HabitButton
 import com.alex.habitsapp.core.presentation.HabitTitle
-import com.alex.habitsapp.onboarding.presentation.model.OnboardingPagerInformation
+import com.alex.habitsapp.feature.onboarding.presentation.model.OnboardingPagerInformation
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator

@@ -1,12 +1,12 @@
-package com.alex.habitsapp.onboarding.presentation.screen
+package com.alex.habitsapp.feature.onboarding.presentation.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.alex.habitsapp.R
-import com.alex.habitsapp.onboarding.presentation.components.OnboardingPager
-import com.alex.habitsapp.onboarding.presentation.model.OnboardingPagerInformation
-import com.alex.habitsapp.onboarding.presentation.viewmodel.OnboardingViewModel
+import com.alex.habitsapp.feature.onboarding.presentation.components.OnboardingPager
+import com.alex.habitsapp.feature.onboarding.presentation.model.OnboardingPagerInformation
+import com.alex.habitsapp.feature.onboarding.presentation.viewmodel.OnboardingViewModel
 
 @Composable
 fun OnboardingScreen(
