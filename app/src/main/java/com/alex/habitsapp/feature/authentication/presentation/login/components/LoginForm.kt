@@ -16,7 +16,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -29,12 +31,17 @@ import androidx.compose.ui.unit.dp
 import com.alex.habitsapp.core.presentation.HabitButton
 import com.alex.habitsapp.core.presentation.HabitPasswordTextfield
 import com.alex.habitsapp.core.presentation.HabitTextfield
+import com.alex.habitsapp.feature.authentication.presentation.login.LoginEvent
+import com.alex.habitsapp.feature.authentication.presentation.login.LoginState
 import com.alex.habitsapp.ui.theme.HabitsAppTheme
 
 @Composable
 fun LoginForm(
-    modifier: Modifier = Modifier,
+    state: LoginState,
+    onEvent: (LoginEvent) -> Unit,
+    modifier: Modifier = Modifier
 ) {
+    val focusManager = LocalFocusManager.current
     Column(
         modifier = modifier.background(Color.White, shape = RoundedCornerShape(20.dp)),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -48,8 +55,8 @@ fun LoginForm(
 
         Divider(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp), color = MaterialTheme.colorScheme.background)
         HabitTextfield(
-            value = "Email",
-            onValueChange = {},
+            value = state.email,
+            onValueChange = { onEvent(LoginEvent.EmailChanged(it))},
             placeholder = "Email",
             contentDescription = "Enter Email", //Se usa para testing pero es usado tambien para discapacitados
             modifier = Modifier
@@ -63,27 +70,30 @@ fun LoginForm(
                 imeAction = ImeAction.Next
             ),
             keyboardActions = KeyboardActions(onAny = {
-
+                focusManager.moveFocus(FocusDirection.Next)
             }),
-            errorMessage = null,
-            isEnabled = true
+            errorMessage = state.emailError,
+            isEnabled = !state.isLoading
         )
 
         HabitPasswordTextfield(
-            value = "Password", onValueChange = {}, contentDescription = "Enter Password",
+            value = state.password,
+            onValueChange = {onEvent(LoginEvent.PasswordChanged(it))},
+            contentDescription = "Enter Password",
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 6.dp)
                 .padding(horizontal = 20.dp),
-            errorMessage = null,
-            isEnabled = true,
+            errorMessage = state.passwordError,
+            isEnabled =!state.isLoading,
             keyboardOptions = KeyboardOptions(
                 autoCorrect = false,
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(onAny = {
-
+                focusManager.clearFocus()
+                onEvent(LoginEvent.Login)
             })
         )
 
@@ -92,9 +102,9 @@ fun LoginForm(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
-            isEnabled = true
+            isEnabled = !state.isLoading
         ) {
-
+            onEvent(LoginEvent.Login)
         }
 
         TextButton(onClick = { /*TODO*/ }) {
@@ -105,7 +115,7 @@ fun LoginForm(
             )
         }
 
-        TextButton(onClick = { }) {
+        TextButton(onClick = { onEvent(LoginEvent.SignUp) }) {
             Text(
                 text = buildAnnotatedString {
                     append("Don’t have an account? ")
@@ -123,6 +133,6 @@ fun LoginForm(
 @Composable
 fun LoginFormPreview() {
     HabitsAppTheme{
-        LoginForm()
+//        LoginForm()
     }
 }

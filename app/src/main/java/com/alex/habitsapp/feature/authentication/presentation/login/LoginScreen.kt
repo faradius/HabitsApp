@@ -18,14 +18,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.alex.habitsapp.R
 import com.alex.habitsapp.core.presentation.HabitTitle
 import com.alex.habitsapp.feature.authentication.presentation.login.components.LoginForm
 
-@Preview(showBackground = true)
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    viewModel: LoginViewModel = hiltViewModel()
+) {
+    val state = viewModel.state
+
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.loginbackground),
@@ -64,7 +67,8 @@ fun LoginScreen() {
                 HabitTitle(title = "Welcome To\nMonumental Habits")
             }
 
-            LoginForm()
+            LoginForm(state,viewModel::onEvent)
+            //es igual que esto onEvent = {viewModel.onEvent(it)}
         }
 
     }
