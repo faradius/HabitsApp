@@ -1,7 +1,13 @@
 package com.alex.habitsapp.feature.authentication.di
 
+import com.alex.habitsapp.feature.authentication.data.matcher.EmailMatcherImpl
 import com.alex.habitsapp.feature.authentication.data.repository.AuthenticationRepositoryImpl
+import com.alex.habitsapp.feature.authentication.domain.matcher.EmailMatcher
 import com.alex.habitsapp.feature.authentication.domain.repository.AuthenticationRepository
+import com.alex.habitsapp.feature.authentication.domain.usecase.LoginUseCases
+import com.alex.habitsapp.feature.authentication.domain.usecase.LoginWithEmailUseCase
+import com.alex.habitsapp.feature.authentication.domain.usecase.ValidateEmailUseCase
+import com.alex.habitsapp.feature.authentication.domain.usecase.ValidatePasswordUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,5 +21,21 @@ object AuthenticationModule {
     @Singleton
     fun provideAuthenticationRepository(): AuthenticationRepository {
         return AuthenticationRepositoryImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun provideEmailMatcher(): EmailMatcher {
+        return EmailMatcherImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun provideLoginUseCases(repository: AuthenticationRepository,emailMatcher: EmailMatcher): LoginUseCases {
+        return LoginUseCases(
+            loginWithEmailUseCase = LoginWithEmailUseCase(repository),
+            validateEmailUseCase = ValidateEmailUseCase(emailMatcher),
+            validatePasswordUseCase = ValidatePasswordUseCase()
+        )
     }
 }

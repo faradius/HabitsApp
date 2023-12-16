@@ -24,7 +24,25 @@ fun NavigationHost(
         }
         
         composable(NavigationRoute.Login.route){
-            LoginScreen()
+            LoginScreen(
+                onLogin = {
+                    navHostController.popBackStack()
+                    navHostController.navigate(NavigationRoute.Home.route)
+                }, onSignUp = {
+                    navHostController.navigate(NavigationRoute.SignUp.route)
+                }
+            )
+
+        }
+
+        composable(NavigationRoute.SignUp.route){
+            Text(text = "Estas en signup")
+
+        }
+
+        composable(NavigationRoute.Home.route){
+            Text(text = "Estas en home")
+
         }
     }
 }
