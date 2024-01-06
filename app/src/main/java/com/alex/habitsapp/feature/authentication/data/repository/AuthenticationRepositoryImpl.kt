@@ -16,4 +16,15 @@ class AuthenticationRepositoryImpl : AuthenticationRepository {
             Result.failure(e)
         }
     }
+
+    override suspend fun signup(email: String, password: String): Result<Unit> {
+        return try {
+            //Firebase no soporta corrutinas por lo tanto le tenemos que decir await() esto es corrutinas en general
+            Firebase.auth.createUserWithEmailAndPassword(email, password).await()
+            //Si no hay error entonces devolvemos un success
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

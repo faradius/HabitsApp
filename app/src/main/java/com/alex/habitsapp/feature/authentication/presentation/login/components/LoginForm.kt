@@ -41,6 +41,7 @@ import com.alex.habitsapp.ui.theme.HabitsAppTheme
 fun LoginForm(
     state: LoginState,
     onEvent: (LoginEvent) -> Unit,
+    onSignup: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
@@ -124,7 +125,7 @@ fun LoginForm(
                 )
             }
 
-            TextButton(onClick = { onEvent(LoginEvent.SignUp) }) {
+            TextButton(onClick = onSignup) {
                 Text(
                     text = buildAnnotatedString {
                         append("Don’t have an account? ")

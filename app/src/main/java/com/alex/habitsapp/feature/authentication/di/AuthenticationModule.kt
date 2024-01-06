@@ -6,6 +6,8 @@ import com.alex.habitsapp.feature.authentication.domain.matcher.EmailMatcher
 import com.alex.habitsapp.feature.authentication.domain.repository.AuthenticationRepository
 import com.alex.habitsapp.feature.authentication.domain.usecase.LoginUseCases
 import com.alex.habitsapp.feature.authentication.domain.usecase.LoginWithEmailUseCase
+import com.alex.habitsapp.feature.authentication.domain.usecase.SignupUseCases
+import com.alex.habitsapp.feature.authentication.domain.usecase.SignupWithEmailUseCase
 import com.alex.habitsapp.feature.authentication.domain.usecase.ValidateEmailUseCase
 import com.alex.habitsapp.feature.authentication.domain.usecase.ValidatePasswordUseCase
 import dagger.Module
@@ -34,6 +36,16 @@ object AuthenticationModule {
     fun provideLoginUseCases(repository: AuthenticationRepository,emailMatcher: EmailMatcher): LoginUseCases {
         return LoginUseCases(
             loginWithEmailUseCase = LoginWithEmailUseCase(repository),
+            validateEmailUseCase = ValidateEmailUseCase(emailMatcher),
+            validatePasswordUseCase = ValidatePasswordUseCase()
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideSignupUseCases(repository: AuthenticationRepository,emailMatcher: EmailMatcher): SignupUseCases {
+        return SignupUseCases(
+            signupWithEmailUseCase = SignupWithEmailUseCase(repository),
             validateEmailUseCase = ValidateEmailUseCase(emailMatcher),
             validatePasswordUseCase = ValidatePasswordUseCase()
         )

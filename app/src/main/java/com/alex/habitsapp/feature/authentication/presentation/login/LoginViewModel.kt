@@ -33,9 +33,6 @@ class LoginViewModel @Inject constructor(
             is LoginEvent.PasswordChanged -> {
                 state = state.copy(password = event.password)
             }
-            LoginEvent.SignUp -> {
-                state = state.copy(signUp = true)
-            }
         }
     }
 
@@ -65,6 +62,5 @@ class LoginViewModel @Inject constructor(
                 state = state.copy(isLoading = false)
             }
         }
-
     }
 }
