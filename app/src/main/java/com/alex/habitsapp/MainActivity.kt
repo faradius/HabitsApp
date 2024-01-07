@@ -34,6 +34,9 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun getStartDestination(): NavigationRoute{
+        if (viewModel.isLoggedIn){
+            return NavigationRoute.Home
+        }
         return if (viewModel.hasSeenOnboarding){
             NavigationRoute.Login
         }else{
