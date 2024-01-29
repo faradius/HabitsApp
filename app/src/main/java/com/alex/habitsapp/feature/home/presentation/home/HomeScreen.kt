@@ -27,9 +27,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.alex.habitsapp.R
-import com.alex.habitsapp.feature.home.presentation.components.HomeDateSelector
-import com.alex.habitsapp.feature.home.presentation.components.HomeHabit
-import com.alex.habitsapp.feature.home.presentation.components.HomeQuote
+import com.alex.habitsapp.feature.home.presentation.home.components.HomeDateSelector
+import com.alex.habitsapp.feature.home.presentation.home.components.HomeHabit
+import com.alex.habitsapp.feature.home.presentation.home.components.HomeQuote
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

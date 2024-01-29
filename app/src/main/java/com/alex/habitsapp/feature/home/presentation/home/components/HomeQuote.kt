@@ -1,4 +1,4 @@
-package com.alex.habitsapp.feature.home.presentation.components
+package com.alex.habitsapp.feature.home.presentation.home.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image

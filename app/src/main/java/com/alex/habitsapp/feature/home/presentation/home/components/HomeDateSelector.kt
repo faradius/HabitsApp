@@ -1,4 +1,4 @@
-package com.alex.habitsapp.feature.home.presentation.components
+package com.alex.habitsapp.feature.home.presentation.home.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
