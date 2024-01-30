@@ -1,6 +1,11 @@
 package com.alex.habitsapp.feature.home.di
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.alex.habitsapp.feature.home.data.repository.HomeRepositoryImpl
+import com.alex.habitsapp.feature.home.domain.detail.usecase.DetailUseCases
+import com.alex.habitsapp.feature.home.domain.detail.usecase.GetHabitByIdUseCase
+import com.alex.habitsapp.feature.home.domain.detail.usecase.InsertHabitUseCase
 import com.alex.habitsapp.feature.home.domain.home.usecase.CompleteHabitUseCase
 import com.alex.habitsapp.feature.home.domain.home.usecase.GetHabitForDateUseCase
 import com.alex.habitsapp.feature.home.domain.home.usecase.HomeUseCases
@@ -21,6 +26,14 @@ object HomeModule {
         completeHabitUseCase = CompleteHabitUseCase(repository)
     )
 
+    @Singleton
+    @Provides
+    fun provideDetailUseCases(repository: HomeRepository) = DetailUseCases(
+        getHabitByIdUseCase = GetHabitByIdUseCase(repository),
+        insertHabitUseCase = InsertHabitUseCase(repository)
+    )
+
+    @RequiresApi(Build.VERSION_CODES.O)
     @Singleton
     @Provides
     fun provideHomeRepository(): HomeRepository {
