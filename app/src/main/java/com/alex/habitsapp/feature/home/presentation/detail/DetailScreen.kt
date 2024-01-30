@@ -1,5 +1,7 @@
 package com.alex.habitsapp.feature.home.presentation.detail
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,37 +18,74 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.alex.habitsapp.core.presentation.HabitTextfield
+import com.alex.habitsapp.feature.home.presentation.detail.components.DetailFrequency
+import com.alex.habitsapp.feature.home.presentation.detail.components.DetailReminder
+import com.maxkeppeler.sheets.clock.ClockDialog
+import com.maxkeppeler.sheets.clock.models.ClockConfig
+import com.maxkeppeler.sheets.clock.models.ClockSelection
+import java.time.LocalTime
 
+
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen(){
+fun DetailScreen(
+    onBack: () -> Unit,
+    onSave: () -> Unit,
+    viewModel: DetailViewModel = hiltViewModel()
+) {
+    val state = viewModel.state
+
+    LaunchedEffect(state.isSaved) {
+        if (state.isSaved) {
+            onSave()
+        }
+    }
+
+    val clockState = com.maxkeppeker.sheets.core.models.base.rememberSheetState()
+    ClockDialog(
+        state = clockState,
+        selection = ClockSelection.HoursMinutes { hours, minutes ->
+            viewModel.onEvent(DetailEvent.ReminderChange(LocalTime.of(hours, minutes)))
+        },
+        config = ClockConfig(
+            defaultTime = state.reminder,
+            is24HourFormat = true, //para 24 horas o 12 horas
+        )
+    )
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text(text = "New Habit") },
                 navigationIcon = {
-                    IconButton(onClick = {}) { Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "back") }
+                    IconButton(onClick = onBack) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "back")
+                    }
                 }
             )
         }
     ) {
-        Column (
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
                 .padding(horizontal = 20.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
-        ){
+        ) {
             HabitTextfield(
-                value = "New Habit",
-                onValueChange = {},
+                value = state.habitName,
+                onValueChange = { viewModel.onEvent(DetailEvent.NameChange(it)) },
                 placeholder = "New Habit",
                 contentDescription = "Enter habit name",
                 modifier = Modifier.fillMaxWidth(),
@@ -56,9 +95,17 @@ fun DetailScreen(){
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions {
-
+                    viewModel.onEvent(DetailEvent.HabitSaved)
                 }
             )
+            DetailFrequency(
+                selectedDays = state.frequency,
+                onFrequencyChange = {
+                    viewModel.onEvent(DetailEvent.FrequencyChange(it))
+                }
+            )
+
+            DetailReminder(reminder = state.reminder, onTimeClick = { clockState.show() })
         }
 
     }

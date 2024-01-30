@@ -1,5 +1,7 @@
 package com.alex.habitsapp.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -7,9 +9,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.alex.habitsapp.feature.authentication.presentation.login.LoginScreen
 import com.alex.habitsapp.feature.authentication.presentation.signup.SignupScreen
+import com.alex.habitsapp.feature.home.presentation.detail.DetailScreen
 import com.alex.habitsapp.feature.home.presentation.home.HomeScreen
 import com.alex.habitsapp.feature.onboarding.presentation.screen.OnboardingScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationHost(
     navHostController: NavHostController,
@@ -17,15 +21,16 @@ fun NavigationHost(
 ) {
     NavHost(navController = navHostController, startDestination = startDestination.route) {
         composable(NavigationRoute.Onboarding.route) {
-            OnboardingScreen(onFinish = {
-                navHostController.popBackStack()
-                navHostController.navigate(NavigationRoute.Login.route)
-            },
+            OnboardingScreen(
+                onFinish = {
+                    navHostController.popBackStack()
+                    navHostController.navigate(NavigationRoute.Login.route)
+                },
 
-            )
+                )
         }
-        
-        composable(NavigationRoute.Login.route){
+
+        composable(NavigationRoute.Login.route) {
             LoginScreen(
                 onLogin = {
                     navHostController.popBackStack()
@@ -37,11 +42,11 @@ fun NavigationHost(
 
         }
 
-        composable(NavigationRoute.SignUp.route){
+        composable(NavigationRoute.SignUp.route) {
             SignupScreen(
                 onSignIn = {
-                    navHostController.navigate(NavigationRoute.Home.route){
-                        popUpTo(navHostController.graph.id){
+                    navHostController.navigate(NavigationRoute.Home.route) {
+                        popUpTo(navHostController.graph.id) {
                             inclusive = true
                         }
                     }
@@ -52,8 +57,19 @@ fun NavigationHost(
 
         }
 
-        composable(NavigationRoute.Home.route){
-            HomeScreen()
+        composable(NavigationRoute.Home.route) {
+            HomeScreen(onNewHabit = {
+                navHostController.navigate(NavigationRoute.Detail.route)
+            }, onSettings = {
+                navHostController.navigate(NavigationRoute.Settings.route)
+            })
+        }
+
+        composable(NavigationRoute.Detail.route) {
+            DetailScreen(
+                onBack = { navHostController.popBackStack() },
+                onSave = { navHostController.popBackStack() }
+            )
         }
     }
 }

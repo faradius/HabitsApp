@@ -1,5 +1,7 @@
 package com.alex.habitsapp.feature.home.presentation.home
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -10,10 +12,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,9 +36,12 @@ import com.alex.habitsapp.feature.home.presentation.home.components.HomeDateSele
 import com.alex.habitsapp.feature.home.presentation.home.components.HomeHabit
 import com.alex.habitsapp.feature.home.presentation.home.components.HomeQuote
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    onNewHabit: () -> Unit,
+    onSettings: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val state = viewModel.state
@@ -44,14 +52,33 @@ fun HomeScreen(
             CenterAlignedTopAppBar(
                 title = { Text(text = "Home") },
                 navigationIcon = {
-                IconButton(onClick = {}) { Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings") }
-            }
+                    IconButton(onClick = { onSettings() }) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Settings"
+                        )
+                    }
+                }
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { onNewHabit() },
+                containerColor = MaterialTheme.colorScheme.primary,
+                shape = CircleShape
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Create Habit",
+                    tint = MaterialTheme.colorScheme.tertiary
+                )
+            }
         }
-    ) {paddingValues ->
-        LazyColumn(modifier = Modifier
-            .padding(paddingValues)
-            .padding(start = 20.dp),
+    ) { paddingValues ->
+        LazyColumn(
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(start = 20.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
             contentPadding = PaddingValues(bottom = 20.dp)
         ) {
@@ -66,7 +93,9 @@ fun HomeScreen(
 
             item {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(end = 20.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 20.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
@@ -86,12 +115,12 @@ fun HomeScreen(
                 }
             }
 
-            items(state.habits){
+            items(state.habits) {
                 HomeHabit(
                     habit = it,
                     selectedDate = state.selectedDate.toLocalDate(),
                     onCheckedChange = { viewModel.onEvent(HomeEvent.CompleteHabit(it)) },
-                    onHabitClick = {  })
+                    onHabitClick = { })
             }
 
         }
