@@ -18,6 +18,6 @@ interface HomeDao {
     @Query("SELECT * FROM HabitEntity WHERE id = :id")
     fun getHabitById(id: String): HabitEntity
 
-    @Query("SELECT * FROM HabitEntity WHERE startDate <= :date")
+    @Query("SELECT * FROM HabitEntity WHERE startDate <= :date ORDER BY id ASC")
     fun getAllHabitsForSelectedDate(date: Long): Flow<List<HabitEntity>>
 }

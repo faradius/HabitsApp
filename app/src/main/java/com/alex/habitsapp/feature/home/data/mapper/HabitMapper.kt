@@ -6,6 +6,8 @@ import com.alex.habitsapp.feature.home.data.extension.toStartOfDateTimestamp
 import com.alex.habitsapp.feature.home.data.extension.toTimeStamp
 import com.alex.habitsapp.feature.home.data.extension.toZonedDateTime
 import com.alex.habitsapp.feature.home.data.local.entity.HabitEntity
+import com.alex.habitsapp.feature.home.data.remote.dto.HabitDto
+import com.alex.habitsapp.feature.home.data.remote.dto.HabitResponse
 import com.alex.habitsapp.feature.home.domain.model.Habit
 import java.time.DayOfWeek
 
@@ -31,4 +33,34 @@ fun Habit.toEntity(): HabitEntity {
         reminder = this.reminder.toZonedDateTime().toTimeStamp(),
         startDate = this.startDate.toStartOfDateTimestamp()
     )
+}
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun HabitResponse.toDomain(): List<Habit> {
+    return this.entries.map {
+        val id = it.key
+        val dto = it.value
+        Habit(
+            id = id,
+            name = dto.name,
+            frequency = dto.frequency.map { DayOfWeek.of(it) },
+            completedDates = dto.completedDates?.map { it.toZonedDateTime().toLocalDate() }
+                ?: emptyList(),
+            reminder = dto.reminder.toZonedDateTime().toLocalTime(),
+            startDate = dto.startDate.toZonedDateTime()
+        )
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun Habit.toDto(): HabitResponse {
+    val dto = HabitDto(
+        name = this.name,
+        frequency = this.frequency.map { it.value },
+        completedDates = this.completedDates.map { it.toZonedDateTime().toTimeStamp() },
+        reminder = this.reminder.toZonedDateTime().toTimeStamp(),
+        startDate = this.startDate.toStartOfDateTimestamp()
+    )
+    return mapOf(id to dto)
 }

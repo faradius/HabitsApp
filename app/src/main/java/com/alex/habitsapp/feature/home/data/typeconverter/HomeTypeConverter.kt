@@ -12,6 +12,8 @@ import java.lang.NumberFormatException
 class HomeTypeConverter(
     private val moshi: Moshi
 ) {
+    //Se hace esta conversión de datos por que room no acepta listas de objetos, por lo que nececitamos
+    //convertirlos a string para poder guardarlos en la base de datos, en este caso en JSON con Moshi
     @TypeConverter
     fun fromFrequency(days: List<Int>): String {
         return joinIntoString(days) ?: ""
