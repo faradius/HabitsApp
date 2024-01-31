@@ -1,8 +1,13 @@
 package com.alex.habitsapp.feature.home.di
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.room.Room
+import com.alex.habitsapp.feature.home.data.local.HomeDao
+import com.alex.habitsapp.feature.home.data.local.HomeDatabase
 import com.alex.habitsapp.feature.home.data.repository.HomeRepositoryImpl
+import com.alex.habitsapp.feature.home.data.typeconverter.HomeTypeConverter
 import com.alex.habitsapp.feature.home.domain.detail.usecase.DetailUseCases
 import com.alex.habitsapp.feature.home.domain.detail.usecase.GetHabitByIdUseCase
 import com.alex.habitsapp.feature.home.domain.detail.usecase.InsertHabitUseCase
@@ -10,9 +15,11 @@ import com.alex.habitsapp.feature.home.domain.home.usecase.CompleteHabitUseCase
 import com.alex.habitsapp.feature.home.domain.home.usecase.GetHabitForDateUseCase
 import com.alex.habitsapp.feature.home.domain.home.usecase.HomeUseCases
 import com.alex.habitsapp.feature.home.domain.repository.HomeRepository
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -33,10 +40,26 @@ object HomeModule {
         insertHabitUseCase = InsertHabitUseCase(repository)
     )
 
+    @Singleton
+    @Provides
+    fun provideHabitDao(@ApplicationContext context: Context, moshi: Moshi): HomeDao {
+        return Room.databaseBuilder(
+            context,
+            HomeDatabase::class.java,
+            "habits_db"
+        ).addTypeConverter(HomeTypeConverter(moshi)).build().dao()
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     @Singleton
     @Provides
-    fun provideHomeRepository(): HomeRepository {
-        return HomeRepositoryImpl()
+    fun provideHomeRepository(dao: HomeDao): HomeRepository {
+        return HomeRepositoryImpl(dao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideMoshi(): Moshi{
+        return Moshi.Builder().build()
     }
 }
