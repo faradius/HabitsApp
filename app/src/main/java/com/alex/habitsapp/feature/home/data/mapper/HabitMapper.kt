@@ -6,6 +6,7 @@ import com.alex.habitsapp.feature.home.data.extension.toStartOfDateTimestamp
 import com.alex.habitsapp.feature.home.data.extension.toTimeStamp
 import com.alex.habitsapp.feature.home.data.extension.toZonedDateTime
 import com.alex.habitsapp.feature.home.data.local.entity.HabitEntity
+import com.alex.habitsapp.feature.home.data.local.entity.HabitSyncEntity
 import com.alex.habitsapp.feature.home.data.remote.dto.HabitDto
 import com.alex.habitsapp.feature.home.data.remote.dto.HabitResponse
 import com.alex.habitsapp.feature.home.domain.model.Habit
@@ -63,4 +64,8 @@ fun Habit.toDto(): HabitResponse {
         startDate = this.startDate.toStartOfDateTimestamp()
     )
     return mapOf(id to dto)
+}
+
+fun Habit.toSyncEntity(): HabitSyncEntity{
+    return HabitSyncEntity(id)
 }

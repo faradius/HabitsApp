@@ -24,7 +24,7 @@ class AlarmReceiver: BroadcastReceiver() {
         const val HABIT_ID = "habit_id"
         const val CHANNEL_ID = "habit_channel"
     }
-    //El broadcast receiver no se puede inyectar el repositorio no lo permite por lo que se hace por atributo
+    //El broadcast receiver no se puede inyectar por constructor, no lo permite, por lo que se hace por atributo
     @Inject
     lateinit var repository: HomeRepository
 

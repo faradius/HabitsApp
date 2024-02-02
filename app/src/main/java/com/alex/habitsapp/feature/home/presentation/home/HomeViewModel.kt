@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alex.habitsapp.feature.home.domain.home.usecase.HomeUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -20,6 +21,9 @@ class HomeViewModel @Inject constructor(
 
     init {
         getHabits()
+        viewModelScope.launch {
+            homeUseCases.syncHabitUseCase()
+        }
     }
 
     fun onEvent(event: HomeEvent){
