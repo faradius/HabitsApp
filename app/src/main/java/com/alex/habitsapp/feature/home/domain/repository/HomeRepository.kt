@@ -9,5 +9,5 @@ interface HomeRepository {
     fun getAllHabitsForSelectedDate(date: ZonedDateTime): Flow<List<Habit>>
     suspend fun insertHabit(habit: Habit)
 
-    fun getHabitById(id: String): Habit
+    suspend fun getHabitById(id: String): Habit
 }

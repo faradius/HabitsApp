@@ -9,6 +9,7 @@ import com.alex.habitsapp.feature.home.data.mapper.toDto
 import com.alex.habitsapp.feature.home.data.mapper.toEntity
 import com.alex.habitsapp.feature.home.data.remote.HomeApi
 import com.alex.habitsapp.feature.home.data.remote.util.resultOf
+import com.alex.habitsapp.feature.home.domain.alarm.AlarmHandler
 import com.alex.habitsapp.feature.home.domain.model.Habit
 import com.alex.habitsapp.feature.home.domain.repository.HomeRepository
 import kotlinx.coroutines.CancellationException
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import java.lang.Exception
 import java.time.DayOfWeek
 import java.time.LocalTime
 import java.time.ZonedDateTime
@@ -25,7 +27,8 @@ import java.time.ZonedDateTime
 @RequiresApi(Build.VERSION_CODES.O)
 class HomeRepositoryImpl(
     private val dao: HomeDao,
-    private val api: HomeApi
+    private val api: HomeApi,
+    private val alarmHandler: AlarmHandler
 ) : HomeRepository {
 
 
@@ -53,6 +56,7 @@ class HomeRepositoryImpl(
 
 
     override suspend fun insertHabit(habit: Habit) {
+        handleAlarm(habit)
         dao.insertHabit(habit.toEntity())
         resultOf {
             api.insertHabit(habit.toDto())
@@ -60,11 +64,24 @@ class HomeRepositoryImpl(
     }
 
     private suspend fun insertHabits(habits: List<Habit>) {
-        dao.insertHabits(habits.map { it.toEntity() })
+        habits.forEach{
+            handleAlarm(it)
+            dao.insertHabit(it.toEntity())
+        }
+    }
+
+    private suspend fun handleAlarm(habit: Habit){
+        try {
+            val previous = dao.getHabitById(habit.id)
+            alarmHandler.cancel(previous.toDomain())
+        }catch (e: Exception){
+            //El habito no existe
+        }
+        alarmHandler.setRecurringAlarm(habit)
     }
 
 
-    override fun getHabitById(id: String): Habit {
+    override suspend fun getHabitById(id: String): Habit {
         return dao.getHabitById(id).toDomain()
     }
 }

@@ -4,11 +4,13 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.room.Room
+import com.alex.habitsapp.feature.home.data.alarm.AlarmHandlerImpl
 import com.alex.habitsapp.feature.home.data.local.HomeDao
 import com.alex.habitsapp.feature.home.data.local.HomeDatabase
 import com.alex.habitsapp.feature.home.data.remote.HomeApi
 import com.alex.habitsapp.feature.home.data.repository.HomeRepositoryImpl
 import com.alex.habitsapp.feature.home.data.typeconverter.HomeTypeConverter
+import com.alex.habitsapp.feature.home.domain.alarm.AlarmHandler
 import com.alex.habitsapp.feature.home.domain.detail.usecase.DetailUseCases
 import com.alex.habitsapp.feature.home.domain.detail.usecase.GetHabitByIdUseCase
 import com.alex.habitsapp.feature.home.domain.detail.usecase.InsertHabitUseCase
@@ -47,12 +49,12 @@ object HomeModule {
 
     @Singleton
     @Provides
-    fun provideHabitDao(@ApplicationContext context: Context, moshi: Moshi): HomeDao {
+    fun provideHabitDao(@ApplicationContext context: Context): HomeDao {
         return Room.databaseBuilder(
             context,
             HomeDatabase::class.java,
             "habits_db"
-        ).addTypeConverter(HomeTypeConverter(moshi)).build().dao()
+        ).addTypeConverter(HomeTypeConverter()).build().dao()
     }
 
     @Singleton
@@ -76,13 +78,13 @@ object HomeModule {
     @RequiresApi(Build.VERSION_CODES.O)
     @Singleton
     @Provides
-    fun provideHomeRepository(dao: HomeDao, api: HomeApi): HomeRepository {
-        return HomeRepositoryImpl(dao, api)
+    fun provideHomeRepository(dao: HomeDao, api: HomeApi, alarmHandler: AlarmHandler): HomeRepository {
+        return HomeRepositoryImpl(dao, api, alarmHandler)
     }
 
     @Singleton
     @Provides
-    fun provideMoshi(): Moshi{
-        return Moshi.Builder().build()
+    fun provideAlarmHandler(@ApplicationContext context: Context): AlarmHandler{
+        return AlarmHandlerImpl(context)
     }
 }
