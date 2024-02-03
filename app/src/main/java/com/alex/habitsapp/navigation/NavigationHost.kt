@@ -14,12 +14,14 @@ import com.alex.habitsapp.feature.authentication.presentation.signup.SignupScree
 import com.alex.habitsapp.feature.home.presentation.detail.DetailScreen
 import com.alex.habitsapp.feature.home.presentation.home.HomeScreen
 import com.alex.habitsapp.feature.onboarding.presentation.screen.OnboardingScreen
+import com.alex.habitsapp.feature.settings.presentation.SettingsScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationHost(
     navHostController: NavHostController,
-    startDestination: NavigationRoute
+    startDestination: NavigationRoute,
+    logout: () -> Unit
 ) {
     NavHost(navController = navHostController, startDestination = startDestination.route) {
         composable(NavigationRoute.Onboarding.route) {
@@ -82,6 +84,24 @@ fun NavigationHost(
                 onBack = { navHostController.popBackStack() },
                 onSave = { navHostController.popBackStack() }
             )
+        }
+
+        composable(NavigationRoute.Settings.route) {
+           SettingsScreen(
+               onBack = {
+                   navHostController.popBackStack()
+               }, onLogout = {
+                   logout()
+                   navHostController.navigate(NavigationRoute.Login.route) {
+                       //Borra todoo el backstack
+                       popUpTo(navHostController.graph.id) {
+                           inclusive = true
+                       }
+                   }
+
+               }
+           )
+
         }
     }
 }

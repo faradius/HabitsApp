@@ -7,6 +7,7 @@ import com.alex.habitsapp.feature.authentication.domain.repository.Authenticatio
 import com.alex.habitsapp.feature.authentication.domain.usecase.GetUserIdUseCase
 import com.alex.habitsapp.feature.authentication.domain.usecase.LoginUseCases
 import com.alex.habitsapp.feature.authentication.domain.usecase.LoginWithEmailUseCase
+import com.alex.habitsapp.feature.authentication.domain.usecase.LogoutUseCase
 import com.alex.habitsapp.feature.authentication.domain.usecase.SignupUseCases
 import com.alex.habitsapp.feature.authentication.domain.usecase.SignupWithEmailUseCase
 import com.alex.habitsapp.feature.authentication.domain.usecase.ValidateEmailUseCase
@@ -56,5 +57,11 @@ object AuthenticationModule {
     @Singleton
     fun provideGetUserIdUseCase(repository: AuthenticationRepository): GetUserIdUseCase {
         return GetUserIdUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLogoutUseCase(repository: AuthenticationRepository): LogoutUseCase {
+        return LogoutUseCase(repository)
     }
 }
